@@ -29,7 +29,7 @@ RUN sdkmanager "platform-tools" "platforms;android-30"
 
 WORKDIR /app
 
-COPY mobile-android-test/Critical /app/Critical
+COPY critical_suite.py /app/
 COPY requirements.txt /app/
 
 RUN pip install -r requirements.txt
