@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/taufiq0205-test/mobile-android-tests.git
+    repoURL: https://github.com/taufiq0205-test/mobile-android-test.git
     path: kubernetes
     targetRevision: HEAD
   destination:

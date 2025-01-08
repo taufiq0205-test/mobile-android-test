@@ -5,7 +5,7 @@ metadata:
 spec:
   containers:
   - name: mobile-tests
-    image: your-registry/mobile-tests:latest
+    image: taufiq/mobile-tests:latest
     volumeMounts:
     - name: allureResult
       mountPath: /app/allureResult
