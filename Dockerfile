@@ -1,13 +1,23 @@
 FROM python:3.12
 
-# Android SDK dependencies
-RUN apt-get update && apt-get install -y \
+# Set noninteractive installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Update package lists and install dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     wget \
     unzip \
-    openjdk-11-jdk \
+    default-jdk \
+    curl \
+    gnupg2 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js, npm, and Android tools
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     nodejs \
-    npm \
-    adb \
+    android-tools-adb \
     && rm -rf /var/lib/apt/lists/*
 
 
