@@ -1,0 +1,37 @@
+FROM python:3.12
+
+# Android SDK dependencies
+RUN apt-get update && apt-get install -y \
+    wget \
+    unzip \
+    openjdk-11-jdk \
+    nodejs \
+    npm \
+    adb \
+    && rm -rf /var/lib/apt/lists/*
+
+
+# Appium and other dependencies \
+RUN npm install -g appium
+RUN npm install -g appium-doctor
+
+# Set up Android SDK
+ENV ANDROID_HOME /opt/android-sdk
+RUN mkdir -p ${ANDROID_HOME}
+RUN wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip \
+    && unzip commandlinetools-linux-*_latest.zip -d ${ANDROID_HOME} \
+    && rm commandlinetools-linux-*_latest.zip
+ENV PATH ${PATH}:${ANDROID_HOME}/cmdline-tools/bin
+
+# Accept licenses and install Android platform tools
+RUN yes | sdkmanager --licenses
+RUN sdkmanager "platform-tools" "platforms;android-30"
+
+WORKDIR /app
+
+COPY mobile-android-test/Critical /app/Critical
+COPY requirements.txt /app/
+
+RUN pip install -r requirements.txt
+
+CMD ["pytest", "-v", "critical_suite.py", "--alluredir=/app/allureResult"]

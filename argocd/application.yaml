@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mobile-tests
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/taufiq0205-test/mobile-android-tests.git
+    path: kubernetes
+    targetRevision: HEAD
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mobile-tests
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: allure-report
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: allure-report
+  template:
+    metadata:
+      labels:
+        app: allure-report
+    spec:
+      containers:
+      - name: allure
+        image: frankescobar/allure-docker-service
+        ports:
+        - containerPort: 5050
+        volumeMounts:
+        - name: allureResult
+          mountPath: /app/allureResult
+      volumes:
+      - name: allureResult
+        emptyDir: {}
