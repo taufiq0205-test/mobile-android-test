@@ -23,5 +23,6 @@ spec:
         - name: allure-results
           mountPath: /app/allureReport
       volumes:
-      - name: allure-results
-        emptyDir: {}
+        - name: allure-results
+          persistentVolumeClaim:
+            claimName: allure-pvc
