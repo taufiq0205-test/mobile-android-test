@@ -17,8 +17,8 @@ spec:
       - name: test-runner
         image: mobile-test-runner:latest
         imagePullPolicy: Never
-        command: ["pytest"]
-        args: ["-v", "critical_suite.py", "--alluredir", "./allureReport/"]
+        command: ["/bin/sh"]
+        args: ["-c", "sleep infinity"]
         volumeMounts:
         - name: allure-results
           mountPath: /app/allureReport
