@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mobile-test-runner
+  namespace: mobile-testing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mobile-test-runner
+  template:
+    metadata:
+      labels:
+        app: mobile-test-runner
+    spec:
+      containers:
+      - name: test-runner
+        image: mobile-test-runner:latest
+        imagePullPolicy: Never
+        command: ["pytest"]
+        args: ["-v", "critical_suite.py", "--alluredir", "./allureReport/"]
+        volumeMounts:
+        - name: allure-results
+          mountPath: /app/allureReport
+      volumes:
+      - name: allure-results
+        emptyDir: {}

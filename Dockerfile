@@ -1,7 +1,6 @@
 FROM python:3.12
 
-# Set noninteractive installation
-ENV DEBIAN_FRONTEND=noninteractive
+WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
@@ -34,8 +33,9 @@ ENV PATH ${PATH}:${ANDROID_HOME}/cmdline-tools/latest/bin
 
 WORKDIR /app
 
-COPY requirements.txt /app/
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN pip install -r requirements.txt
+COPY . .
 
-CMD ["pytest", "-v", "pb_test_critical.py", "--alluredir=/app/allure-results"]
+CMD ["pytest", "-v", "pb_test_critical.py", "--alluredir=./allureReport/"]
