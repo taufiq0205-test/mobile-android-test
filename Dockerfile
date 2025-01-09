@@ -23,6 +23,10 @@ RUN npm config set registry https://registry.npmjs.org/ && \
     npm install -g appium@2.0.0 && \
     npm install -g appium-doctor
 
+# Appium drivers
+RUN appium driver install uiautomator2
+RUN appium driver install chromium
+
 # Set up Android SDK
 ENV ANDROID_HOME /opt/android-sdk
 RUN mkdir -p ${ANDROID_HOME}
