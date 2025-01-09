@@ -3,9 +3,7 @@ FROM python:3.12
 # Set noninteractive installation
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Update package lists and install dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     unzip \
     default-jdk \
@@ -13,17 +11,18 @@ RUN apt-get update && \
     gnupg2 \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Node.js, npm, and Android tools
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    nodejs \
-    android-tools-adb \
-    && rm -rf /var/lib/apt/lists/*
+# Install Node.js and npm from NodeSource
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get update && \
+    apt-get install -y nodejs && \
+    npm install -g npm@latest
+# Verify installations
+RUN node --version && npm --version
 
-
-# Appium and other dependencies \
-RUN npm i --location=global appium
-RUN npm install -g appium-doctor
+# Install Appium and dependencies
+RUN npm config set registry https://registry.npmjs.org/ && \
+    npm install -g appium@2.0.0 && \
+    npm install -g appium-doctor
 
 # Set up Android SDK
 ENV ANDROID_HOME /opt/android-sdk
@@ -31,17 +30,12 @@ RUN mkdir -p ${ANDROID_HOME}
 RUN wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip \
     && unzip commandlinetools-linux-*_latest.zip -d ${ANDROID_HOME} \
     && rm commandlinetools-linux-*_latest.zip
-ENV PATH ${PATH}:${ANDROID_HOME}/cmdline-tools/bin
-
-# Accept licenses and install Android platform tools
-RUN yes | sdkmanager --licenses
-RUN sdkmanager "platform-tools" "platforms;android-30"
+ENV PATH ${PATH}:${ANDROID_HOME}/cmdline-tools/latest/bin
 
 WORKDIR /app
 
-COPY critical_suite.py /app/
 COPY requirements.txt /app/
 
 RUN pip install -r requirements.txt
 
-CMD ["pytest", "-v", "critical_suite.py", "--alluredir=/app/allureResult"]
+CMD ["pytest", "-v", "pb_test_critical.py", "--alluredir=/app/allure-results"]
