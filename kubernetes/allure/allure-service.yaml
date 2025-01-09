@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: allure-report-service
+  namespace: mobile-testing
+spec:
+  selector:
+    app: allure-report
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5050

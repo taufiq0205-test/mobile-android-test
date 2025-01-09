@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: allure-report-server
+  namespace: mobile-testing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: allure-report
+  template:
+    metadata:
+      labels:
+        app: allure-report
+    spec:
+      containers:
+      - name: allure-report
+        image: frankescobar/allure-docker-service
+        ports:
+        - containerPort: 5050
+        volumeMounts:
+        - name: allure-results
+          mountPath: /app/allure-results
+        env:
+        - name: CHECK_RESULTS_EVERY_SECONDS
+          value: "30"
+        - name: KEEP_HISTORY
+          value: "true"
+      volumes:
+      - name: allure-results
+        persistentVolumeClaim:
+          claimName: allure-pvc
