@@ -18,7 +18,3 @@ spec:
       selfHeal: true
 
 
-
-      https://github:
-        com/taufiq0205-test/mobile-android-test:
-          git:
