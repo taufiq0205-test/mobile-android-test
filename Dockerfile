@@ -22,7 +22,7 @@ RUN apt-get update && \
 
 
 # Appium and other dependencies \
-RUN npm install -g appium
+RUN npm i --location=global appium
 RUN npm install -g appium-doctor
 
 # Set up Android SDK
