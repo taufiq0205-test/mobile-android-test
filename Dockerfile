@@ -8,6 +8,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     default-jdk \
     curl \
     gnupg2 \
+    qemu-kvm \
+    libvirt-daemon-system \
+    bridge-utils \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Node.js and npm from NodeSource
@@ -35,6 +38,13 @@ RUN wget https://dl.google.com/android/repository/commandlinetools-linux-8512546
     && rm commandlinetools-linux-*_latest.zip
 ENV PATH ${PATH}:${ANDROID_HOME}/cmdline-tools/latest/bin
 
+# Add these new commands
+RUN mkdir -p ${ANDROID_HOME}/cmdline-tools/latest && \
+    mv ${ANDROID_HOME}/cmdline-tools/* ${ANDROID_HOME}/cmdline-tools/latest/ || true
+
+# Install Android SDK packages
+RUN yes | sdkmanager --sdk_root=$ANDROID_HOME "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+
 WORKDIR /app
 
 COPY requirements.txt .
@@ -42,4 +52,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["pytest", "-v", "pb_test_critical.py", "--alluredir=./allureReport/"]
+# Add these lines at the end
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
+# Change this line from
+# CMD ["pytest", "-v", "pb_test_critical.py", "--alluredir=./allureReport/"]
+# to
+CMD ["/start.sh"]

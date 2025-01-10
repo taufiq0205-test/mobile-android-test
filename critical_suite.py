@@ -84,15 +84,14 @@ def setup_teardown():
     cap: Dict[str, Any] = {
         'platformName': "Android",
         'automationName': "UiAutomator2",
-        'deviceName': "emulator-5554",
+        'deviceName': os.getenv('DEVICE_NAME', 'emulator-5554'),
         'appPackage': "com.photobook.android.staging",
         'appActivity': "com.photobook.android.page.applaunch.AppLaunchActivity",
         'noReset': False,
         'autoGrantPermissions': True
     }
 
-    # Initialize driver with options
-    url = 'http://127.0.0.1:4723'
+    url = f"http://{os.getenv('APPIUM_HOST', 'localhost')}:{os.getenv('APPIUM_PORT', '4723')}"
     options = AppiumOptions().load_capabilities(cap)
     driver = webdriver.Remote(url, options=options)
 
