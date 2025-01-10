@@ -18,6 +18,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get update && \
     apt-get install -y nodejs && \
     npm install -g npm@latest
+
 # Verify installations
 RUN node --version && npm --version
 
@@ -38,7 +39,6 @@ RUN wget https://dl.google.com/android/repository/commandlinetools-linux-8512546
     && rm commandlinetools-linux-*_latest.zip
 ENV PATH ${PATH}:${ANDROID_HOME}/cmdline-tools/latest/bin
 
-# Add these new commands
 RUN mkdir -p ${ANDROID_HOME}/cmdline-tools/latest && \
     mv ${ANDROID_HOME}/cmdline-tools/* ${ANDROID_HOME}/cmdline-tools/latest/ || true
 
@@ -47,13 +47,16 @@ RUN yes | sdkmanager --sdk_root=$ANDROID_HOME "platform-tools" "platforms;androi
 
 WORKDIR /app
 
-COPY requirements.txt .
+# Copy files in specific order
+COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Move these COPY commands here, before the final COPY .
-COPY start.sh ./start.sh
+# Copy start.sh first and make it executable
+COPY start.sh ./
 RUN chmod +x ./start.sh
 
-COPY . .
+# Copy remaining files
+COPY . ./
 
+# Use the script
 CMD ["./start.sh"]

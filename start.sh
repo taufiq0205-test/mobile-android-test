@@ -1,3 +1,5 @@
+# Create start.sh
+cat > start.sh << 'EOF'
 #!/bin/bash
 
 # Install Android SDK packages
@@ -21,3 +23,7 @@ pytest critical_suite.py --alluredir=/app/allureReport
 
 # Keep container running
 tail -f /dev/null
+EOF
+
+# Make it executable
+chmod +x start.sh
