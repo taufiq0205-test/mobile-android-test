@@ -50,13 +50,10 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Move these COPY commands here, before the final COPY .
+COPY start.sh ./start.sh
+RUN chmod +x ./start.sh
+
 COPY . .
 
-# Add these lines at the end
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
-
-# Change this line from
-# CMD ["pytest", "-v", "pb_test_critical.py", "--alluredir=./allureReport/"]
-# to
-CMD ["/start.sh"]
+CMD ["./start.sh"]
