@@ -5,8 +5,9 @@ metadata:
   namespace: mobile-testing
 spec:
   selector:
-    app: allure-report
+    app: allure-report-server
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 5050
+  - port: 5050
+    targetPort: 5050
+    nodePort: 30050  # Add this line if you want NodePort
+  type: NodePort     # Change from ClusterIP to NodePort if you want external access
