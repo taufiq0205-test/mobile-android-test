@@ -1,0 +1,4 @@
+Begin TCA1005_SIMPLEBOOK_PURCHASE test execution...
+Logging in with email: autobots_ui_buybook@photobookworldwide.com
+Timeout waiting for element: ('id', 'com.photobook.android.staging:id/emailEditText')
+Screenshot saved: /Volumes/Macintosh HD - Data/PycharmProjects/mobile-android-test/screenshots/TCA1005_SIMPLEBOOK_PURCHASE_failure_20250110_202116.png
