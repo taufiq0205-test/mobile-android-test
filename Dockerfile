@@ -8,9 +8,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     default-jdk \
     curl \
     gnupg2 \
-    qemu-kvm \
-    libvirt-daemon-system \
-    bridge-utils \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Node.js and npm from NodeSource
@@ -18,7 +15,6 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get update && \
     apt-get install -y nodejs && \
     npm install -g npm@latest
-
 # Verify installations
 RUN node --version && npm --version
 
@@ -39,24 +35,11 @@ RUN wget https://dl.google.com/android/repository/commandlinetools-linux-8512546
     && rm commandlinetools-linux-*_latest.zip
 ENV PATH ${PATH}:${ANDROID_HOME}/cmdline-tools/latest/bin
 
-RUN mkdir -p ${ANDROID_HOME}/cmdline-tools/latest && \
-    mv ${ANDROID_HOME}/cmdline-tools/* ${ANDROID_HOME}/cmdline-tools/latest/ || true
-
-# Install Android SDK packages
-RUN yes | sdkmanager --sdk_root=$ANDROID_HOME "platform-tools" "platforms;android-33" "build-tools;33.0.2"
-
 WORKDIR /app
 
-# Copy files in specific order
-COPY requirements.txt ./
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy start.sh first and make it executable
-COPY start.sh ./
-RUN chmod +x ./start.sh
+COPY . .
 
-# Copy remaining files
-COPY . ./
-
-# Use the script
-CMD ["./start.sh"]
+CMD ["pytest", "-v", "critical_suite.py", "--alluredir=./allureReport/"]
