@@ -40,6 +40,11 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Create directories
+RUN mkdir -p /app/allure-results /app/screenshots
+
+# Copy entire project structure
 COPY . .
 
-CMD ["pytest", "-v", "critical_suite.py", "--alluredir=./allureReport/"]
+# Change CMD to use run_tests.py
+CMD ["python", "run_tests.py"]
