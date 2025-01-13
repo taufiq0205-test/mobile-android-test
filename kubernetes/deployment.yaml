@@ -22,7 +22,13 @@ spec:
         volumeMounts:
         - name: allure-results
           mountPath: /app/allure-results
+        - name: test-source
+          mountPath: /app/allureReport
       volumes:
-        - name: allure-results
-          persistentVolumeClaim:
-            claimName: allure-pvc
+      - name: allure-results
+        persistentVolumeClaim:
+          claimName: allure-pvc
+      - name: test-source
+        hostPath:
+          path: /mobile-android-test/allureReport
+          type: Directory

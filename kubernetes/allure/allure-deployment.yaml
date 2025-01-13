@@ -18,10 +18,21 @@ spec:
         image: qameta/allure-docker-service
         ports:
         - containerPort: 5050
+        env:
+        - name: CHECK_RESULTS_EVERY_SECONDS
+          value: "30"
+        - name: KEEP_HISTORY
+          value: "true"
+        - name: PROJECT_ID
+          value: "mobile-android"
         volumeMounts:
         - name: allure-results
-          mountPath: /app/allure-results
+          mountPath: /app/projects/mobile-android/results
+        - name: allure-reports
+          mountPath: /app/projects/mobile-android/reports
       volumes:
       - name: allure-results
         persistentVolumeClaim:
           claimName: allure-pvc
+      - name: allure-reports
+        emptyDir: {}

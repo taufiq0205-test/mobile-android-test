@@ -2,4 +2,4 @@ appium-python-client==4.4.0
 selenium==4.27.1
 pytest==8.3.4
 allure-pytest==2.13.5
-
+requests==2.32.3
