@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: allure
-        image: qameta/allure-docker-service
+        image: frankescobar/allure-docker-service
         ports:
         - containerPort: 5050
         env:
