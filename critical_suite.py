@@ -25,8 +25,8 @@ from Critical.TCA1005_SIMPLEBOOK_PURCHASE import SimplebookPurchase
 
 # Global variables
 appium_service = None
+# Global variables
 driver = None
-
 
 def take_screenshot(name: str):
     """Take a screenshot and attach it to the Allure report"""
@@ -72,13 +72,10 @@ def restart_app():
         except Exception as e:
             print(f"Error restarting app: {str(e)}")
 
+
 @pytest.fixture(scope="session", autouse=True)
 def setup_teardown():
-    global appium_service, driver
-
-    # Start Appium service
-    appium_service = AppiumService()
-    appium_service.start()
+    global driver
 
     # Appium capabilities
     cap: Dict[str, Any] = {
@@ -91,7 +88,12 @@ def setup_teardown():
         'autoGrantPermissions': True
     }
 
-    url = f"http://{os.getenv('APPIUM_HOST', 'localhost')}:{os.getenv('APPIUM_PORT', '4723')}"
+    # Use environment variables for Appium connection
+    appium_host = os.getenv('APPIUM_HOST', 'localhost')
+    appium_port = os.getenv('APPIUM_PORT', '4723')
+    url = f"http://{appium_host}:{appium_port}"
+
+    print(f"Connecting to Appium at: {url}")
     options = AppiumOptions().load_capabilities(cap)
     driver = webdriver.Remote(url, options=options)
 
@@ -285,8 +287,9 @@ class TestPhotobook:
             pytest.fail(f"TCA1005_SIMPLEBOOK_PURCHASE failed: {str(e)}")
 
 if __name__ == "__main__":
-    # Run specific test case by ID
-    pytest.main(["-v", "-m", "test_id('TCA1004')", __file__])
+    # Run all tests by default
+    pytest.main(["-v", "--alluredir=/app/allureReport", __file__])
+
 
     # Or run all tests
     # pytest.main(["-v", __file__])

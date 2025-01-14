@@ -19,6 +19,13 @@ spec:
         imagePullPolicy: Never
         command: ["/bin/sh"]
         args: ["-c", "sleep infinity"]
+        env:
+        - name: APPIUM_HOST
+          value: "localhost"  # or your Appium server address
+        - name: APPIUM_PORT
+          value: "4723"
+        - name: DEVICE_NAME
+          value: "emulator-5554"  # or your device name
         volumeMounts:
         - name: allure-results
           mountPath: /app/allure-results
