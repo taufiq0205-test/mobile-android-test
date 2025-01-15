@@ -19,6 +19,9 @@ from selenium.webdriver.common.actions.pointer_input import PointerInput
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
+from Critical.TCA1006_LILPHOTOBOOK_PURCHASE import LilphotobookPurchase
+from Critical.TCA1008_SIGNIN_GOOGLE import SigninGoogle
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from Critical.TCA1005_SIMPLEBOOK_PURCHASE import SimplebookPurchase
 
@@ -284,6 +287,35 @@ class TestPhotobook:
         except Exception as e:
             take_screenshot("TCA1005_SIMPLEBOOK_PURCHASE_failure")
             pytest.fail(f"TCA1005_SIMPLEBOOK_PURCHASE failed: {str(e)}")
+
+    @pytest.mark.test_id("TCA1006_LILPHOTOBOOK_PURCHASE")
+    @allure.severity(Severity.CRITICAL)
+    def test_TCA1006_LILPHOTOBOOK_PURCHASE(self):
+        """TCA1006_LILPHOTOBOOK_PURCHASE: Buying Lil'Photobook test"""
+        try:
+            print("Begin TCA1006_LILPHOTOBOOK_PURCHASE test execution...")
+            self.login_user("autobots_ui_lilphotobook@photobookworldwide.com", "Testing@123")
+            lilphotobook_purchase = LilphotobookPurchase()
+            lilphotobook_purchase.test_TCA1006_LILPHOTOBOOK_PURCHASE(driver)
+            self.logout_user()
+            print("TCA1006_LILPHOTOBOOK_PURCHASE test execution completed successfully!")
+        except Exception as e:
+            take_screenshot("TCA1006_LILPHOTOBOOK_PURCHASE_failure")
+            pytest.fail(f"TCA1006_LILPHOTOBOOK_PURCHASE failed: {str(e)}")
+
+
+    @pytest.mark.test_id("TCA1008_SIGNIN_GOOGLE")
+    @allure.severity(Severity.CRITICAL)
+    def test_TCA1008_SIGNIN_GOOGLE(self):
+        """TCA1008_SIGNIN_GOOGLE : Login using Google credential"""
+        try:
+            google_signin = SigninGoogle()
+            google_signin.test_TCA1008_SIGNIN_GOOGLE(driver)  # Pass driver as argument
+            self.logout_user()
+            print("TCA1008_SIGNIN_GOOGLE test execution completed successfully!")
+        except Exception as e:
+            take_screenshot("TCA1008_SIGNIN_GOOGLE_failure")
+            pytest.fail(f"TCA1008_SIGNIN_GOOGLE failed: {str(e)}")
 
 if __name__ == "__main__":
     # Run all tests by default
