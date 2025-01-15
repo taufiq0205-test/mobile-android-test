@@ -1,0 +1,1 @@
+Connecting to Appium at: http://localhost:4723

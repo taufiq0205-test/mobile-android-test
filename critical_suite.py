@@ -25,8 +25,8 @@ from Critical.TCA1005_SIMPLEBOOK_PURCHASE import SimplebookPurchase
 
 # Global variables
 appium_service = None
-# Global variables
 driver = None
+
 
 def take_screenshot(name: str):
     """Take a screenshot and attach it to the Allure report"""
@@ -72,28 +72,27 @@ def restart_app():
         except Exception as e:
             print(f"Error restarting app: {str(e)}")
 
-
 @pytest.fixture(scope="session", autouse=True)
 def setup_teardown():
-    global driver
+    global appium_service, driver
+
+    # Start Appium service
+    appium_service = AppiumService()
+    appium_service.start()
 
     # Appium capabilities
     cap: Dict[str, Any] = {
         'platformName': "Android",
         'automationName': "UiAutomator2",
-        'deviceName': os.getenv('DEVICE_NAME', 'emulator-5554'),
+        'deviceName': "emulator-5554",
         'appPackage': "com.photobook.android.staging",
         'appActivity': "com.photobook.android.page.applaunch.AppLaunchActivity",
         'noReset': False,
         'autoGrantPermissions': True
     }
 
-    # Use environment variables for Appium connection
-    appium_host = os.getenv('APPIUM_HOST', 'localhost')
-    appium_port = os.getenv('APPIUM_PORT', '4723')
-    url = f"http://{appium_host}:{appium_port}"
-
-    print(f"Connecting to Appium at: {url}")
+    # Initialize driver with options
+    url = 'http://127.0.0.1:4723'
     options = AppiumOptions().load_capabilities(cap)
     driver = webdriver.Remote(url, options=options)
 
